@@ -1,0 +1,43 @@
+# source: https://theintobooks.wordpress.com/2019/12/28/hello-world-on-risc-v-with-qemu/#comments
+# Comments/annotations provided by Juni L DeYoung on 2022-07-14.
+
+.global _start
+
+_start:
+
+    lui t0, 0x10010		# load upper immediate: 
+						# put 0x10010 into upper 20 bits of t0
+						# Thus, t0 will contain the UART0 address 0x10010000
+
+    andi t1, t1, 0		# zero out t1
+    addi t1, t1, 72		# add (int)'H' == 72 to t1
+    sw t1, 0(t0)		# "store word" low 32 bits of t1 in memory addressed by t0, offset 0
+
+    andi t1, t1, 0
+    addi t1, t1, 101	# (int)'e'
+    sw t1, 0(t0)
+
+    andi t1, t1, 0
+    addi t1, t1, 108	# (int)'l'
+    sw t1, 0(t0)
+
+    andi t1, t1, 0
+    addi t1, t1, 108	# (int)'l'
+    sw t1, 0(t0)
+
+    andi t1, t1, 0
+    addi t1, t1, 111	# (int)'o'
+    sw t1, 0(t0)
+
+    andi t1, t1, 0
+    addi t1, t1, 10		# (int)'LF' -> Line Feed (New Line)
+    sw t1, 0(t0)
+
+finish:
+    beq t1, t1, finish	# branch if t1==t1 (TRUE), jump to label `finish`
+
+# OP notes that their implementation (seen above verbatim) prints "Hello\n" 
+# twice. This is said to be a result of the program running on both cores of the 
+# simulated processor. The `beq` instruction creates an infinite loop, 
+# preventing the program counter from accessing memory locations past the end of
+# our program, which may contain illegal instructions.

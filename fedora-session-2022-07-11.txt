@@ -1,0 +1,357 @@
+jldey@ubuntu:~/Downloads/riscv-fedora-images$ qemu-system-riscv64 \
+>    -nographic \
+>    -machine virt \
+>    -smp 4 \
+>    -m 2G \
+>    -kernel Fedora-Minimal-Rawhide-*-fw_payload-uboot-qemu-virt-smode.elf \
+>    -bios none \
+>    -object rng-random,filename=/dev/urandom,id=rng0 \
+>    -device virtio-rng-device,rng=rng0 \
+>    -device virtio-blk-device,drive=hd0 \
+>    -drive file=Fedora-Minimal-Rawhide-20200108.n.0-sda.raw,format=raw,id=hd0 \
+>    -device virtio-net-device,netdev=usernet \
+>    -netdev user,id=usernet,hostfwd=tcp::10000-:22
+WARNING: Image format was not specified for 'Fedora-Minimal-Rawhide-20200108.n.0-fw_payload-uboot-qemu-virt-smode.elf' and probing guessed raw.
+         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+         Specify the 'raw' format explicitly to remove the restrictions.
+
+OpenSBI v0.5 (Nov 19 2019 00:00:00)
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name          : QEMU Virt Machine
+Platform HART Features : RV64ACDFIMSU
+Platform Max HARTs     : 8
+Current Hart           : 3
+Firmware Base          : 0x80000000
+Firmware Size          : 116 KB
+Runtime SBI Version    : 0.2
+
+PMP0: 0x0000000080000000-0x000000008001ffff (A)
+PMP1: 0x0000000000000000-0xffffffffffffffff (A,R,W,X)
+
+
+U-Boot 2020.01-rc3 (Nov 19 2019 - 00:00:00 +0000)
+
+CPU:   rv64imafdcsu
+Model: riscv-virtio,qemu
+DRAM:  2 GiB
+In:    uart@10000000
+Out:   uart@10000000
+Err:   uart@10000000
+Net:   
+Warning: virtio-net#2 using MAC address from ROM
+eth0: virtio-net#2
+Hit any key to stop autoboot:  0 
+
+Device 0: QEMU VirtIO Block Device
+            Type: Hard Disk
+            Capacity: 3072.0 MB = 3.0 GB (6291456 x 512)
+... is now current device
+Scanning virtio 0:1...
+Found /extlinux/extlinux.conf
+Retrieving file: /extlinux/extlinux.conf
+580 bytes read in 3 ms (188.5 KiB/s)
+Ignoring unknown command: ui
+Ignoring malformed menu command:  autoboot
+Ignoring malformed menu command:  hidden
+Ignoring unknown command: totaltimeout
+1:	Fedora-Minimal-Rawhide-20200108.n.0 (5.5.0-0.rc5.git0.1.1.riscv64.fc32.riscv64)
+Retrieving file: /initramfs-5.5.0-0.rc5.git0.1.1.riscv64.fc32.riscv64.img
+54812844 bytes read in 81 ms (645.4 MiB/s)
+Retrieving file: /vmlinuz-5.5.0-0.rc5.git0.1.1.riscv64.fc32.riscv64
+9248220 bytes read in 25 ms (352.8 MiB/s)
+append: console=ttyS0 earlycon ro root=UUID=730a322e-879c-40f7-9ca0-629e088be0b7 rhgb quiet LANG=en_US.UTF-8
+   Uncompressing Kernel Image
+## Flattened Device Tree blob at 88000000
+   Booting using the fdt blob at 0x88000000
+   Using Device Tree in place at 0000000088000000, end 00000000880040e5
+
+Starting kernel ...
+
+[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+[    0.000000] Linux version 5.5.0-0.rc5.git0.1.1.riscv64.fc32.riscv64 (mockbuild@hifive.delorie.com) (gcc version 9.2.1 20191120 (Red Hat 9.2.1-2) (GCC)) #1 SMP Mon Jan 6 17:31:22 UTC 2020
+[    0.000000] earlycon: ns16550a0 at MMIO 0x0000000010000000 (options '')
+[    0.000000] printk: bootconsole [ns16550a0] enabled
+[  OK  ] Started Show Plymouth Boot Screen.
+[  OK  ] Started Forward Password R…s to Plymouth Directory Watch.
+[  OK  ] Reached target Local Encrypted Volumes.
+[  OK  ] Reached target Paths.
+[  OK  ] Reached target System Initialization.
+[  OK  ] Reached target Basic System.
+[  OK  ] Found device /dev/disk/by-…e-879c-40f7-9ca0-629e088be0b7.
+[  OK  ] Reached target Initrd Root Device.
+[  OK  ] Started dracut initqueue hook.
+[  OK  ] Reached target Remote File Systems (Pre).
+[  OK  ] Reached target Remote File Systems.
+         Starting File System Check…879c-40f7-9ca0-629e088be0b7...
+[  OK  ] Started File System Check …e-879c-40f7-9ca0-629e088be0b7.
+         Mounting /sysroot...
+[  OK  ] Mounted /sysroot.
+[  OK  ] Reached target Initrd Root File System.
+         Starting Reload Configuration from the Real Root...
+[  OK  ] Started Reload Configuration from the Real Root.
+[  OK  ] Reached target Initrd File Systems.
+[  OK  ] Reached target Initrd Default Target.
+         Starting Cleaning Up and Shutting Down Daemons...
+[  OK  ] Stopped target Initrd Default Target.
+[  OK  ] Stopped target Basic System.
+[  OK  ] Stopped target Initrd Root Device.
+[  OK  ] Stopped target Paths.
+[  OK  ] Stopped target Remote File Systems.
+[  OK  ] Stopped target Remote File Systems (Pre).
+[  OK  ] Stopped target Slices.
+[  OK  ] Stopped target Sockets.
+[  OK  ] Stopped target System Initialization.
+[  OK  ] Stopped target Local Encrypted Volumes.
+[  OK  ] Stopped target Swap.
+[  OK  ] Stopped target Timers.
+[  OK  ] Stopped dracut cmdline hook.
+[  OK  ] Stopped dracut initqueue hook.
+         Starting Plymouth switch root service...
+[  OK  ] Stopped Apply Kernel Variables.
+[  OK  ] Stopped Create Volatile Files and Directories.
+[  OK  ] Stopped target Local File Systems.
+[  OK  ] Stopped udev Coldplug all Devices.
+         Stopping udev Kernel Device Manager...
+         Starting Setup Virtual Console...
+[  OK  ] Stopped udev Kernel Device Manager.
+[  OK  ] Started Plymouth switch root service.
+[  OK  ] Started Setup Virtual Console.
+[  OK  ] Closed udev Control Socket.
+[  OK  ] Closed udev Kernel Socket.
+         Starting Cleanup udevd DB...
+[  OK  ] Stopped Create Static Device Nodes in /dev.
+[  OK  ] Stopped Create list of sta… nodes for the current kernel.
+[  OK  ] Started Cleaning Up and Shutting Down Daemons.
+[  OK  ] Started Cleanup udevd DB.
+[  OK  ] Reached target Switch Root.
+         Starting Switch Root...
+[  OK  ] Stopped Switch Root.
+[  OK  ] Created slice system-getty.slice.
+[  OK  ] Created slice system-serial\x2dgetty.slice.
+[  OK  ] Created slice system-sshd\x2dkeygen.slice.
+[  OK  ] Created slice User and Session Slice.
+[  OK  ] Started Forward Password R…uests to Wall Directory Watch.
+[  OK  ] Set up automount Arbitrary…s File System Automount Point.
+[  OK  ] Reached target Local Encrypted Volumes.
+[  OK  ] Stopped target Switch Root.
+[  OK  ] Stopped target Initrd File Systems.
+[  OK  ] Stopped target Initrd Root File System.
+[  OK  ] Reached target Paths.
+[  OK  ] Reached target Remote File Systems.
+[  OK  ] Reached target Slices.
+[  OK  ] Reached target Swap.
+[  OK  ] Listening on Process Core Dump Socket.
+[  OK  ] Listening on initctl Compatibility Named Pipe.
+[  OK  ] Listening on udev Control Socket.
+[  OK  ] Listening on udev Kernel Socket.
+         Mounting Huge Pages File System...
+         Mounting POSIX Message Queue File System...
+         Mounting Kernel Debug File System...
+         Mounting Temporary Directory (/tmp)...
+         Starting Create list of st…odes for the current kernel...
+[  OK  ] Stopped File System Check on Root Device.
+[  OK  ] Stopped Journal Service.
+[  OK  ] Started Entropy Daemon based on the HAVEGE algorithm.
+         Starting Journal Service...
+         Starting Remount Root and Kernel File Systems...
+         Starting Apply Kernel Variables...
+         Starting udev Coldplug all Devices...
+         Starting Setup Virtual Console...
+[  OK  ] Mounted Huge Pages File System.
+[  OK  ] Mounted POSIX Message Queue File System.
+[  OK  ] Mounted Kernel Debug File System.
+[  OK  ] Mounted Temporary Directory (/tmp).
+[  OK  ] Started Create list of sta… nodes for the current kernel.
+[  OK  ] Started Apply Kernel Variables.
+[  OK  ] Started Remount Root and Kernel File Systems.
+[  OK  ] Started Journal Service.
+         Starting Rebuild Hardware Database...
+         Starting Flush Journal to Persistent Storage...
+         Starting Load/Save Random Seed...
+         Starting Create System Users...
+[  OK  ] Started Load/Save Random Seed.
+[  OK  ] Started Create System Users.
+         Starting Create Static Device Nodes in /dev...
+[  OK  ] Started Create Static Device Nodes in /dev.
+[  OK  ] Started Flush Journal to Persistent Storage.
+[  OK  ] Reached target Local File Systems (Pre).
+         Mounting /boot...
+[  OK  ] Mounted /boot.
+[  OK  ] Reached target Local File Systems.
+         Starting Restore /run/initramfs on shutdown...
+         Starting Rebuild Dynamic Linker Cache...
+         Starting Tell Plymouth To Write Out Runtime Data...
+         Starting Commit a transient machine-id on disk...
+         Starting Create Volatile Files and Directories...
+[  OK  ] Started Setup Virtual Console.
+[  OK  ] Started Restore /run/initramfs on shutdown.
+[  OK  ] Started Tell Plymouth To Write Out Runtime Data.
+[  OK  ] Started Commit a transient machine-id on disk.
+[  OK  ] Started udev Coldplug all Devices.
+[  OK  ] Started Create Volatile Files and Directories.
+         Starting Security Auditing Service...
+         Starting Rebuild Journal Catalog...
+[  OK  ] Started Rebuild Journal Catalog.
+[  OK  ] Started Rebuild Dynamic Linker Cache.
+[  OK  ] Started Rebuild Hardware Database.
+         Starting udev Kernel Device Manager...
+         Starting Update is Completed...
+[  OK  ] Started Update is Completed.
+[  OK  ] Started udev Kernel Device Manager.
+[  OK  ] Started Security Auditing Service.
+         Starting Update UTMP about System Boot/Shutdown...
+[  OK  ] Started Update UTMP about System Boot/Shutdown.
+[  OK  ] Reached target System Initialization.
+[  OK  ] Started dnf makecache --timer.
+[  OK  ] Started Daily Cleanup of Temporary Directories.
+[  OK  ] Started daily update of the root trust anchor for DNSSEC.
+[  OK  ] Reached target Timers.
+[  OK  ] Listening on D-Bus System Message Bus Socket.
+[  OK  ] Listening on SSSD Kerberos…ache Manager responder socket.
+[  OK  ] Reached target Sockets.
+[  OK  ] Reached target Basic System.
+         Starting firewalld - dynamic firewall daemon...
+         Starting LSB: Init script for live image....
+         Starting OpenSSH ecdsa Server Key Generation...
+         Starting OpenSSH ed25519 Server Key Generation...
+         Starting OpenSSH rsa Server Key Generation...
+         Starting System Security Services Daemon...
+         Starting D-Bus System Message Bus...
+[  OK  ] Started OpenSSH ecdsa Server Key Generation.
+[  OK  ] Started OpenSSH ed25519 Server Key Generation.
+[  OK  ] Started D-Bus System Message Bus.
+[  OK  ] Started OpenSSH rsa Server Key Generation.
+[  OK  ] Reached target sshd-keygen.target.
+[  OK  ] Started LSB: Init script for live image..
+         Starting NTP client/server...
+[  OK  ] Started System Security Services Daemon.
+[  OK  ] Reached target User and Group Name Lookups.
+         Starting Login Service...
+[  OK  ] Started NTP client/server.
+[  OK  ] Started Login Service.
+[  OK  ] Started firewalld - dynamic firewall daemon.
+[  OK  ] Reached target Network (Pre).
+         Starting Network Manager...
+[  OK  ] Started Network Manager.
+[  OK  ] Reached target Network.
+         Starting Network Manager Wait Online...
+         Starting OpenSSH server daemon...
+         Starting Permit User Sessions...
+[  OK  ] Started Permit User Sessions.
+         Starting Hold until boot process finishes up...
+         Starting Terminate Plymouth Boot Screen...
+
+Welcome to the Fedora/RISC-V disk image
+https://fedoraproject.org/wiki/Architectures/RISC-V
+
+Build date: Wed Jan  8 15:13:59 UTC 2020
+
+Kernel 5.5.0-0.rc5.git0.1.1.riscv64.fc32.riscv64 on an riscv64 (ttyS0)
+
+The root password is 'fedora_rocks!'.
+root password logins are disabled in SSH starting Fedora 31.
+User 'riscv' with password 'fedora_rocks!' in 'wheel' group is provided.
+
+To install new packages use 'dnf install ...'
+
+To upgrade disk image use 'dnf upgrade --best'
+
+If DNS isn’t working, try editing ‘/etc/yum.repos.d/fedora-riscv.repo’.
+
+For updates and latest information read:
+https://fedoraproject.org/wiki/Architectures/RISC-V
+
+Fedora/RISC-V
+-------------
+Koji:               http://fedora.riscv.rocks/koji/
+SCM:                http://fedora.riscv.rocks:3000/
+Distribution rep.:  http://fedora.riscv.rocks/repos-dist/
+Koji internal rep.: http://fedora.riscv.rocks/repos/
+
+fedora-riscv login: root 
+Password: 
+
+[root@fedora-riscv ~]# ls
+anaconda-ks.cfg
+[root@fedora-riscv ~]# mkdir jldey
+[root@fedora-riscv ~]# cd jldey
+[root@fedora-riscv jldey]# ls
+[root@fedora-riscv jldey]# echo "Hello World!"
+Hello World!
+[root@fedora-riscv jldey]# echo $PATH
+/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+[root@fedora-riscv jldey]# echo $PATH > path.txt
+[root@fedora-riscv jldey]# ls
+path.txt
+[root@fedora-riscv jldey]# cat path.txt
+/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+[root@fedora-riscv jldey]# /sbin/shutdown -h
+Shutdown scheduled for Mon 2022-07-11 19:27:54 EDT, use 'shutdown -c' to cancel.
+[root@fedora-riscv jldey]# [  OK  ] Unmounted /run/user/0.
+[  OK  ] Stopped User Runtime Directory /run/user/0.
+[  OK  ] Started Show Plymouth Power Off Screen.
+[  OK  ] Removed slice User Slice of UID 0.
+         Stopping Permit User Sessions...
+[  OK  ] Stopped Permit User Sessions.
+[  OK  ] Stopped target Network.
+[  OK  ] Stopped target User and Group Name Lookups.
+[  OK  ] Stopped target Remote File Systems.
+         Stopping Network Manager...
+         Stopping System Security Services Daemon...
+[  OK  ] Stopped System Security Services Daemon.
+[  OK  ] Stopped Network Manager.
+[  OK  ] Stopped target Network (Pre).
+         Stopping firewalld - dynamic firewall daemon...
+[  OK  ] Stopped LSB: Init script for live image..
+[  OK  ] Stopped firewalld - dynamic firewall daemon.
+[  OK  ] Stopped target Basic System.
+[  OK  ] Stopped Forward Password R…s to Plymouth Directory Watch.
+[  OK  ] Stopped target Paths.
+[  OK  ] Stopped target Slices.
+[  OK  ] Removed slice User and Session Slice.
+[  OK  ] Stopped target Sockets.
+[  OK  ] Closed SSSD Kerberos Cache Manager responder socket.
+         Stopping D-Bus System Message Bus...
+[  OK  ] Stopped D-Bus System Message Bus.
+[  OK  ] Closed D-Bus System Message Bus Socket.
+[  OK  ] Stopped target System Initialization.
+[  OK  ] Stopped target Local Encrypted Volumes.
+[  OK  ] Stopped Forward Password R…uests to Wall Directory Watch.
+[  OK  ] Stopped Commit a transient machine-id on disk.
+[  OK  ] Stopped Apply Kernel Variables.
+[  OK  ] Stopped Update is Completed.
+[  OK  ] Stopped Rebuild Dynamic Linker Cache.
+[  OK  ] Stopped Rebuild Hardware Database.
+[  OK  ] Stopped Rebuild Journal Catalog.
+         Stopping Update UTMP about System Boot/Shutdown...
+[  OK  ] Stopped Update UTMP about System Boot/Shutdown.
+         Stopping Security Auditing Service...
+[  OK  ] Stopped Security Auditing Service.
+[  OK  ] Stopped Create Volatile Files and Directories.
+[  OK  ] Stopped target Local File Systems.
+         Unmounting /boot...
+         Unmounting Temporary Directory (/tmp)...
+[  OK  ] Unmounted Temporary Directory (/tmp).
+[  OK  ] Unmounted /boot.
+[  OK  ] Stopped target Local File Systems (Pre).
+[  OK  ] Stopped target Swap.
+[  OK  ] Reached target Unmount All Filesystems.
+[  OK  ] Stopped Create Static Device Nodes in /dev.
+[  OK  ] Stopped Create System Users.
+[  OK  ] Stopped Remount Root and Kernel File Systems.
+[  OK  ] Reached target Shutdown.
+[  OK  ] Reached target Final Step.
+[  OK  ] Started Power-Off.
+[  OK  ] Reached target Power-Off.
+[ 1035.563976] [739]: Failed to remount '/' read-only: Device or resource busy
+[ 1035.621689] systemd-shutdown[1]: Failed to finalize  file systems, ignoring
+[ 1035.687143] reboot: Power down
+jldey@ubuntu:~/Downloads/riscv-fedora-images$
