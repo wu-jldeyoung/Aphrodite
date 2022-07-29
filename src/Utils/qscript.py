@@ -1,4 +1,4 @@
-# Author: jldeyoung on 2022-07-28 (this document as of 17:52)
+# Author: jldeyoung on 2022-07-??
 
 # Assumptions:
 # qemu-system-riscv64 is installed and configured correctly.
@@ -36,10 +36,12 @@ env = os.environ.copy()
 # run QEMU with args as arguments
 # shell = True has the potential for shell injection, as noted in documentation
 # However, it may be that using shlex.join(), as done here, can mitigate this injection vulnerability.
+# shlex.join() is shell-escaped
 # env=env may be unnecessary here, but keeping it in seems like good practice for portability
 
 # stdin, stdout, and stderr can be directed to an existing file object.
 # subprocess.run() waits for a process to complete. Popen() may be more useful to us here.
+
 #s = sp.run(shlex.join(args), stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.STDOUT, text=True, env = env)
 
 # need a Popen object to communicate with child process
@@ -48,7 +50,12 @@ env = os.environ.copy()
 # The following results in undefined behavior when called on the list args
 # but executes as expected when called on args joined into a single string.
 s = sp.run(shlex.join(args), shell=True, text=True, env=env)
+print("Past call to sp.run()")
 
+s = sp.Popen(shlex.join(args), shell=True, text=True, env=env)
+print("Past call to sp.Popen()")
+
+# At approximately 18:04, I used Ctrl+D EOF to try to ensure the script had stopped execution, and lost my terminal :(
 
 # THREE EQUIVALENT EXPRESSIONS:
 #==============================
@@ -65,3 +72,4 @@ s = sp.run(shlex.join(args), shell=True, text=True, env=env)
 # loop time! Do a couple that send "info registers\n"
 
 #quit QEMU
+
