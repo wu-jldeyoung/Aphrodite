@@ -1,12 +1,16 @@
-# Author: jldeyoung on 2022-07-??
-
+# Author: wu-jldeyoung on 2022-07-??
+#
 # Assumptions:
+# ====================
 # qemu-system-riscv64 is installed and configured correctly.
-# A working copy of the riscv-gnu-toolchain is built on the system,
-# with the environment variable $RISCV set to the toolchain build
-# directory. The build I used was the riscv-unknown-linux-gnu-,
-# configured with --enable-multilib.
+#
+# A working copy of the riscv-gnu-toolchain is built on the
+# system, with the environment variable $RISCV set to the
+# toolchain build directory. The build I used was the
+# riscv-unknown-linux-gnu- variant, configured with --enable-multilib.
+#
 # The toolchain install directory has been added to PATH.
+# ====================
 
 import os
 import datetime as dt
@@ -50,14 +54,11 @@ env = os.environ.copy()
 qemu = sp.Popen(shlex.join(args), shell=True, text=True, env=env)
 print("Past call to sp.Popen()")
 
-# At approximately 18:04, I used Ctrl+D EOF to try to ensure the script had stopped execution, and lost my terminal :(
-
 # pipe "info registers\n" to QEMU
-
 
 # tell the monitor to continue execution ("c\n")
 
 # loop time! Do a couple that send "info registers\n"
 
-#quit QEMU
+# quit QEMU and close the subprocess
 
