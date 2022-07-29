@@ -34,21 +34,23 @@ https://pulp-platform.org/docs/riscv_workshop_zurich/schiavone_wosh2019_tutorial
 ## meeting notes:
 
 Adding PATH variables
-	- export PATH=$PATH:/opt/riscv/bin
-	- echo PATH before and after changes
-	- save PATH before changing it (in case of bricked systems)
-		- export OLDPATH=$PATH
-		- echo $PATH >oldpath.txt
-	
-	- get *either* 32-bit or 64-bit working with *some* extensions
-		- focus on 32-bit, no extensions rv32i
-	
-	- Look at Qemu -- emulation environment (runs test suite)
+
+- export PATH=$PATH:/opt/riscv/bin
+- echo PATH before and after changes
+- save PATH before changing it (in case of bricked systems)
+	- export OLDPATH=$PATH
+	- echo $PATH >oldpath.txt
+
+- get *either* 32-bit or 64-bit working with *some* extensions
+	- focus on 32-bit, no extensions rv32i
+
+- Look at Qemu -- emulation environment (runs test suite)
 	
 ## work progress
 
 adding to PATH
-	- old path: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+	
+- old path: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 	
 	$ export PATH=$PATH:/opt/riscv/bin
 	
@@ -80,6 +82,7 @@ of PATH, not the end.]
 
 IT WORKED!!!
 The successful one was the Newlib version, which uses the commands:
+	
 	$ ./configure --prefix=/opt/riscv
 	$ make
 
@@ -136,18 +139,20 @@ parallel process: generate traces from *anything* on qemu
 look into verilator
 
 PROCESS OVERVIEW (high-level):
-	1. Get RISC-V/PULPissimo running in emulation or simulation
-	2. Use simulation tools to generate logs/outputs of as much information 
-		about register transfers as possible
-	3. Parse those logs and outputs into a trace
+
+1. Get RISC-V/PULPissimo running in emulation or simulation
+2. Use simulation tools to generate logs/outputs of as much information about 
+	register transfers as possible
+3. Parse those logs and outputs into a trace
 
 IMMEDIATE GOAL: emulate the RISC-V ISA and run Linux.
 	
 # 2022-07-11
 	
-Simulation vs. Emulation
-	- simulation runs like a whole processor, with wires and all
-	- emulation recreates an ISA
+## Simulation vs. Emulation
+
+- simulation runs like a whole processor, with wires and all
+- emulation recreates an ISA
 
 1. Verify qemu works with a bare-metal C program
 2. Try running Linux on the virt RISC-V
@@ -187,10 +192,12 @@ See fedora-session-2022-07-11.txt for more details.
 # 2022-07-12
 
 getting register values through DEBUG ports
-	- a Qemu setting (debug? trace?)
+	
+- a Qemu setting (debug? trace?)
 
 Try new risc-v C compilers
-	- research error 306 on the PULP riscv-gcc
+
+- research error 306 on the PULP riscv-gcc
 
 Inspired by our meeting this morning, I did some background reading on RISC,
 MIPS, and ARM.
@@ -257,13 +264,14 @@ work on finding out what the hell went wrong.
 # 2022-07-13
 
 Test program: change the value of a register and detect that it was changed:
-	- less complex: integer addition
-	- more complex: "Hello World!"
+
+- less complex: integer addition
+- more complex: "Hello World!"
 
 **use an assembly program to generate a trace**
 
-	1. ANYTHING running on Qemu (asm or C)
-	2. Get register values out of Qemu
+1. ANYTHING running on Qemu (asm or C)
+2. Get register values out of Qemu
 
 This [RISC-V bare-metal assembly "Hello World!"](https://theintobooks.wordpress.com/2019/12/28/hello-world-on-risc-v-with-qemu/#comments)
 referenced the [riscv-probe](https://github.com/michaeljclark/riscv-probe), 
