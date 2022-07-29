@@ -26,32 +26,28 @@ args = ["qemu-system-riscv64",
 	"-monitor", "stdio", 	# sends QEMU monitor to stdio (specified below in the subprocess call)
 	"-S",			# starts the guest paused
 	"-d", "cpu",		# logs cpu state (register values) to file specified by -D
-	"-D", "./logs/qpyLog"+dt.datetime.now().strftime("%Y%m%d-%H%M%S")+".txt"]
-				# creates log file with this name in the current working directory
+	"-D",			# creates log file with the below name in the current working directory
+	"./logs/qpyLog"+dt.datetime.now().strftime("%Y%m%d-%H%M%S")+".txt"
+	]
 
 # create a Python file object for writing traces
 # opening in 'x' mode will return an error if the file already exists
 # "qtrace" prefix specifies that this is a QEMU-formatted trace (not Daikon)
-f = open("trace/qtrace-"+dt.datetime.now().strftime("%Y%m%d-%H%M%S")+".txt", "xt")
+trace = open("trace/qtrace-"+dt.datetime.now().strftime("%Y%m%d-%H%M%S")+".txt", "xt")
 
 # copy current environment variables into a dict for use by subprocess
 env = os.environ.copy()
 
 # run QEMU with args as arguments
-# shell = True has the potential for shell injection, as noted in documentation
+# shell = True has the potential for shell injection, as noted in documentation.
 # However, it may be that using shlex.join(), as done here, can mitigate this 
 # injection vulnerability, as shlex.join() is shell-escaped.
-# env=env may be unnecessary here, but keeping it in seems like good practice for portability
-
-# stdin, stdout, and stderr can be directed to an existing file object.
-# subprocess.run() waits for a process to complete. Popen() may be more useful to us here.
+# env=env may be unnecessary here, but keeping it in seems like good practice 
+# for portability
 
 #s = sp.run(shlex.join(args), stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.STDOUT, text=True, env = env)
 
-# need a Popen object to communicate with child process
-# PIPE is a file object (stream?) that handles I/O to and from the child process.
-
-s = sp.Popen(shlex.join(args), shell=True, text=True, env=env)
+qemu = sp.Popen(shlex.join(args), shell=True, text=True, env=env)
 print("Past call to sp.Popen()")
 
 # At approximately 18:04, I used Ctrl+D EOF to try to ensure the script had stopped execution, and lost my terminal :(
