@@ -602,3 +602,46 @@ the same thing with a subprocess.
 
 Looking at the documentation, I discovered that `subprocess.call("*",shell=True)` 
 functions as basically a 1:1 replacement for `os.system`.
+
+# 2022-07-29
+
+## Understanding [Subprocess](https://docs.python.org/3/library/subprocess.html)
+
+After lots of reading and tinkering with the `subprocess` module, I have 
+discovered a few things.
+
+	# The following results in undefined behavior when called on the list args
+	# but executes as expected when called on args joined into a single string.
+	s = sp.run(shlex.join(args), shell=True, text=True, env=env)
+
+The following are equivalent (although they have slightly different return 
+values):
+
+	os.system(" ".join(args))
+	retcode = sp.call(" ".join(args), shell=True)
+	s = sp.run(" ".join(args), shell=True, text=True)
+
+Using `shell=True` leaves a potential vulnerability to shell injection attacks, 
+although using `shlex.join()` mitigates this risk by using a properly shell-
+escaped command.
+
+It may be necessary/good practice to copy the environment variables into a 
+dictionary before opening the subprocess, and passing that dictionary as the 
+`env` argument.
+
+`subprocess.run()` waits for the child process to complete before moving on to 
+the next line of Python code, however `subprocess.Popen()` "executes a child 
+program in a new process." The new `Popen` object can then be sent input from 
+the parent and have its output read by the parent.
+
+The child process's `stdin`, `stdout`, and `stderr` can all be sent to an 
+existing file object, or through a pipe. For extra flexibility, we will use a 
+pipe. `subprocess.PIPE` is a file object that can handle I/O to and from the 
+child.
+
+Entering `Ctrl+D` into the terminal without an active process closes the window,
+causing a loss of the information that was contained in it.
+
+`Popen.communicate()` waits for the child process to terminate before sending 
+and receiving data. I believe I will want to use the `Popen` object's I/O 
+streams to send and recieve data.
