@@ -1,0 +1,8 @@
+# ignore all files in logs directory
+src/Utils/logs/
+
+# ignore qTrace files, but not Daikon traces.
+src/Utils/trace/qtrace-*.txt
+
+# ignore all PDF files
+*.pdf
