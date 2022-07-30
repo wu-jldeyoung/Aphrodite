@@ -1,4 +1,4 @@
-# Author: wu-jldeyoung on 2022-07-??
+# Author: wu-jldeyoung on 2022-07-29
 #
 # Assumptions:
 # ====================
@@ -10,6 +10,17 @@
 # riscv-unknown-linux-gnu- variant, configured with --enable-multilib.
 #
 # The toolchain install directory has been added to PATH.
+# 
+# Input:
+# ====================
+# A linked ELF file compiled and linked for riscv64, 
+# at location specified by the variable path below.
+# 
+# Output:
+# ====================
+# A .txt file, with register values as formatted by QEMU's
+# internal logging tools and the monitor command `info registers`.
+#
 # ====================
 
 import os
@@ -49,12 +60,25 @@ env = os.environ.copy()
 # env=env may be unnecessary here, but keeping it in seems like good practice 
 # for portability
 
-#s = sp.run(shlex.join(args), stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.STDOUT, text=True, env = env)
-
-qemu = sp.Popen(shlex.join(args), shell=True, text=True, env=env)
-print("Past call to sp.Popen()")
+qemu = sp.Popen(shlex.join(args), shell=True, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.STDOUT, text=True, env=env)
+#print("child process created")
 
 # pipe "info registers\n" to QEMU
+# TODO: parse QEMU output to Daikon format
+
+#outs, errs = qemu.communicate(input="info registers") #waits for child to terminate
+#print(outs)
+
+# Popen.stdin is a writeable stream object.
+# Popen.stdout, stderr are readable stream objects.
+#qInp = qemu.stdin
+#qOut = qemu.stdout
+#qErr = qemu.stderr
+
+#qemu.stdin.write("info registers")
+#print("past write() call")
+#print(qemu.stdout.read())
+#print("past read() call")
 
 # tell the monitor to continue execution ("c\n")
 
