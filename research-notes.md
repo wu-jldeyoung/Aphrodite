@@ -605,6 +605,8 @@ functions as basically a 1:1 replacement for `os.system`.
 
 # 2022-07-29
 
+## Understanding [Subprocess](https://docs.python.org/3/library/subprocess.html)
+
 After lots of reading and tinkering with the `subprocess` module, I have 
 discovered a few things.
 
@@ -639,3 +641,7 @@ child.
 
 Entering `Ctrl+D` into the terminal without an active process closes the window,
 causing a loss of the information that was contained in it.
+
+`Popen.communicate()` waits for the child process to terminate before sending 
+and receiving data. I believe I will want to use the `Popen` object's I/O 
+streams to send and recieve data.
