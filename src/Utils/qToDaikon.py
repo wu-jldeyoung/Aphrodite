@@ -20,7 +20,8 @@
 # Output:
 # ====================
 # A properly formatted Daikon trace in the current working 
-# directory, with the same filename as the input .txt.
+# directory, with the same timestamp as the input qtrace-*.txt, 
+# now with the new dtrace- prefix.
 #
 # ====================
 
