@@ -6,3 +6,9 @@ src/Utils/trace/qtrace-*.txt
 
 # ignore all PDF files
 *.pdf
+
+# ignore Images directory
+Images/
+
+# ignore Fedora Demo
+Fedora_Demo/
