@@ -1,0 +1,5 @@
+QEMU 4.2.1 monitor - type 'help' for more information
+(qemu) ====================
+====================
+
+====================
