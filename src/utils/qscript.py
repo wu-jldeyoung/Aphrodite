@@ -23,10 +23,13 @@
 #
 # ====================
 
-import os
 import datetime as dt
 import subprocess as sp
+import threading
 import shlex
+import signal
+import time
+import os
 
 # For now, we'll go with ~/Desktop/riscv-hello-world/asm/hello
 # Config file? Leave hard-coded?
@@ -60,13 +63,21 @@ env = os.environ.copy()
 # env=env may be unnecessary here, but keeping it in seems like good practice 
 # for portability
 
-qemu = sp.Popen(shlex.join(args), shell=True, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.STDOUT, text=True, env=env)
-#print("child process created")
+qemu = sp.Popen(shlex.join(args), shell=True, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE, text=True, env=env)
+print("child process created")
 
 # pipe "info registers\n" to QEMU
 # TODO: parse QEMU output to Daikon format
 
-#outs, errs = qemu.communicate(input="info registers") #waits for child to terminate
+print("sleeping")
+time.sleep(2)
+qemu.stdin.write("c\n")
+print("past write() call")
+time.sleep(1)
+print(qemu.stdout.read())
+print("past read0 call")
+
+#outs, errs = qemu.communicate(input="info registers",timeout=10) #waits for child to terminate
 #print(outs)
 
 # Popen.stdin is a writeable stream object.
@@ -75,10 +86,27 @@ qemu = sp.Popen(shlex.join(args), shell=True, stdin=sp.PIPE, stdout=sp.PIPE, std
 #qOut = qemu.stdout
 #qErr = qemu.stderr
 
-#qemu.stdin.write("info registers")
-#print("past write() call")
-#print(qemu.stdout.read())
-#print("past read() call")
+f = open("test.txt","at")
+
+#qemu.send_signal(signal.SIGSTOP)
+f.write("\n====================\n")
+f.write(qemu.stdout.read())
+
+print("past read0 call")
+qemu.send_signal(SIGCONT)
+qemu.stdin.write("info registers")
+print("past write() call")
+qemu.send_signal(SIGSTOP)
+
+print(qemu.stdout.read())
+print("past read0 call")
+time.sleep(2)
+print(qemu.stdout.read())
+print("past read1 call")
+qemu.stdin.write("info registers")
+print("past write() call")
+print(qemu.stdout.read())
+print("past read2 call")
 
 # tell the monitor to continue execution ("c\n")
 
