@@ -645,3 +645,16 @@ causing a loss of the information that was contained in it.
 `Popen.communicate()` waits for the child process to terminate before sending 
 and receiving data. I believe I will want to use the `Popen` object's I/O 
 streams to send and recieve data.
+
+# 2022-08-01
+
+1. Troubleshoot concurrency
+1. Work QEMU with concurrency know-how
+1. Failing that, write a script that runs QEMU with logging enabled, terminates 
+QEMU, and parses the output to a Daikon trace.
+
+Subprocess is not the right package to use for spawning interactive programs 
+inside Python. See this article about [why you shouldn't use Popen pipes with 
+interactive child processes.](https://pexpect.readthedocs.io/en/latest/FAQ.html#whynotpipe)
+
+Instead, we'll use [the `pexpect` package.](https://pexpect.readthedocs.io/en/latest/index.html)
