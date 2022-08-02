@@ -186,7 +186,7 @@ Shutdown:
 
 	$ /sbin/shutdown -h
 
-See fedora-session-2022-07-11.txt for more details.
+See [the session transcript](/fedora-session-2022-07-11.txt) for more details.
 
 
 # 2022-07-12
@@ -375,14 +375,15 @@ In accordance with this, I changed line 5 of `hello.s` to be
 	lui t0, 0x10000
 
 since that is the line that loads our UART0 address into register t0. As noted 
-in my annotations of this assembly, `lui` loads the given 20-bit immediate into 
-the upper 20 bits of the destination register `rd`, in this case, `t0`.
+in [my annotations of this assembly](/src/Assembly_Hello/riscv-hello-asm_annotated), 
+`lui` loads the given 20-bit immediate into the upper 20 bits of the destination 
+register `rd`, in this case, `t0`.
 
 **EXIT QEMU: 'Ctrl+A' then 'x'**
 
-To run the program, I had to change the Makefile so that it would invoke my 
-Linux glibc multilib cross-compiler rather than the Newlib 32-bit cross-compiler 
-used in the example:
+To run the program, I had to change the [Makefile](/src/Assembly_Hello/Makefile) 
+so that it would invoke my Linux glibc multilib cross-compiler rather than the 
+Newlib 32-bit cross-compiler used in the example:
 
 	hello: hello.o link.lds
 		riscv64-unknown-linux-gnu-ld -T link.lds -o hello hello.o
@@ -585,7 +586,7 @@ Thus,
 
 	qemu-system-riscv64 -machine virt -kernel ~/Desktop/riscv-hello-world/asm/hello -monitor stdio -s -S -d cpu -D ./hello_log.txt
 
-produces the log [hello.txt](/hello.txt). A similar effect can be achieved with 
+produces the log [hello.txt](/hello_log.txt). A similar effect can be achieved with 
 `logfile ./hello_log.txt` in the monitor.
 
 # 2022-07-25
@@ -658,3 +659,7 @@ inside Python. See this article about [why you shouldn't use Popen pipes with
 interactive child processes.](https://pexpect.readthedocs.io/en/latest/FAQ.html#whynotpipe)
 
 Instead, we'll use [the `pexpect` package.](https://pexpect.readthedocs.io/en/latest/index.html)
+
+This is ***so*** much easier to work with than `subprocess` was. I *already* 
+have [a small QEMU-formatted trace](/src/utils/qtrace_first.txt), after about 20 
+minutes of reading and 2 minutes of writing a couple lines of code.
