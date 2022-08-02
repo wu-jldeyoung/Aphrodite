@@ -24,18 +24,23 @@
 # ====================
 
 import datetime as dt
-import subprocess as sp
-import threading
+#import subprocess as sp
+#import threading
 import shlex
-import signal
+#import signal
 import time
-import os
+#import os
+import pexpect as px
 
 # For now, we'll go with ~/Desktop/riscv-hello-world/asm/hello
 # Config file? Leave hard-coded?
 
 # location of a linked ELF file compiled for riscv64
 path = "/home/jldey/Desktop/riscv-hello-world/asm/hello"
+
+# get current time for file-naming
+curT = dt.datetime.now()
+tSim = curT.strftime("%Y%m%d-%H%M%S")
 
 # commandline arguments for QEMU, tokenized according to shlex.split()
 args = ["qemu-system-riscv64", 
@@ -45,72 +50,44 @@ args = ["qemu-system-riscv64",
 	"-S",			# starts the guest paused
 	"-d", "cpu",		# logs cpu state (register values) to file specified by -D
 	"-D",			# creates log file with the below name in the current working directory
-	"./logs/qpyLog"+dt.datetime.now().strftime("%Y%m%d-%H%M%S")+".txt"
+	"./logs/qpyLog"+tSim+".txt"
 	]
 
 # create a Python file object for writing traces
 # opening in 'x' mode will return an error if the file already exists
 # "qtrace" prefix specifies that this is a QEMU-formatted trace (not Daikon)
-trace = open("trace/qtrace-"+dt.datetime.now().strftime("%Y%m%d-%H%M%S")+".txt", "xt")
 
-# copy current environment variables into a dict for use by subprocess
-env = os.environ.copy()
+trace = open("trace/qtrace-"+tSim+".txt", "xt")
+trace.write("QEMU trace "+curT.strftime("%Y-%M-%D %H:%M:%S")+"\n\n=====================\n\n")
 
-# run QEMU with args as arguments
-# shell = True has the potential for shell injection, as noted in documentation.
-# However, it may be that using shlex.join(), as done here, can mitigate this 
-# injection vulnerability, as shlex.join() is shell-escaped.
-# env=env may be unnecessary here, but keeping it in seems like good practice 
-# for portability
 
-qemu = sp.Popen(shlex.join(args), shell=True, stdin=sp.PIPE, stdout=sp.PIPE, stderr=sp.PIPE, text=True, env=env)
+# run QEMU with args as arguments, shell-escaped for security
+qemu = px.spawn(shlex.join(args))
 print("child process created")
 
-# pipe "info registers\n" to QEMU
+# grab initial state
+qemu.expect(".*\r\n(qemu)")
+qemu.sendline("info registers")
+
+# tell QEMU to continue execution ("c")
+qemu.expect("(qemu)")
+qemu.sendline("c")
+print("continuing")
+
+# pipe "info registers" to QEMU
 # TODO: parse QEMU output to Daikon format
+# TODO: while not timed out
+for i in range(10):
+	trace.write(str(qemu.before) + "\n\n=====================\n\n")
+	print(str(i+1)+" reg vals written")
+	qemu.expect("(qemu)")
+	qemu.sendline("info registers")
 
-print("sleeping")
-time.sleep(2)
-qemu.stdin.write("c\n")
-print("past write() call")
-time.sleep(1)
-print(qemu.stdout.read())
-print("past read0 call")
-
-#outs, errs = qemu.communicate(input="info registers",timeout=10) #waits for child to terminate
-#print(outs)
-
-# Popen.stdin is a writeable stream object.
-# Popen.stdout, stderr are readable stream objects.
-#qInp = qemu.stdin
-#qOut = qemu.stdout
-#qErr = qemu.stderr
-
-f = open("test.txt","at")
-
-#qemu.send_signal(signal.SIGSTOP)
-f.write("\n====================\n")
-f.write(qemu.stdout.read())
-
-print("past read0 call")
-qemu.send_signal(SIGCONT)
-qemu.stdin.write("info registers")
-print("past write() call")
-qemu.send_signal(SIGSTOP)
-
-print(qemu.stdout.read())
-print("past read0 call")
-time.sleep(2)
-print(qemu.stdout.read())
-print("past read1 call")
-qemu.stdin.write("info registers")
-print("past write() call")
-print(qemu.stdout.read())
-print("past read2 call")
-
-# tell the monitor to continue execution ("c\n")
-
-# loop time! Do a couple that send "info registers\n"
+#time.sleep(10)
 
 # quit QEMU and close the subprocess
+qemu.expect("(qemu)")
+qemu.sendline("q")
+trace.write(str(qemu.before) + "\n\n=====================\n\n")
 
+print("quit QEMU")
