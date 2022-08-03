@@ -44,7 +44,9 @@ tSim = curT.strftime("%Y%m%d-%H%M%S")
 
 # commandline arguments for QEMU, tokenized according to shlex.split()
 args = ["qemu-system-riscv64", 
-	"-machine", "virt", 	# see QEMU documentation for more details, or use qemu-system-riscv64 -machine help
+	"-machine",
+	#"sifive_e", 
+	"virt", 	# see QEMU documentation for more details, or use qemu-system-riscv64 -machine help
 	"-kernel", path, 	# launches the file at path on the guest system
 	"-monitor", "stdio", 	# sends QEMU monitor to stdio (specified below in the subprocess call)
 	"-S",			# starts the guest paused
@@ -58,7 +60,7 @@ args = ["qemu-system-riscv64",
 # "qtrace" prefix specifies that this is a QEMU-formatted trace (not Daikon)
 
 trace = open("trace/qtrace-"+tSim+".txt", "xt")
-trace.write("QEMU trace "+curT.strftime("%Y-%M-%D %H:%M:%S")+"\n\n=====================\n\n")
+trace.write("QEMU trace "+curT.strftime("%Y-%m-%d %H:%M:%S")+"\n\n=====================\n\n")
 
 
 # run QEMU with args as arguments, shell-escaped for security

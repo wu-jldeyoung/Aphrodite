@@ -23,10 +23,31 @@
 # directory, with the same timestamp as the input qtrace-*.txt, 
 # now with the new dtrace- prefix.
 #
+# IDEAL FUNCTIONALITY:
+# ====================
+# - this tool is "qtrace-agnostic" (either a log trace or a 
+#   monitor trace)
+#	- support for monitor traces will be prioritized, as
+#	  they contain FPRs.
+#
 # ====================
 
-#import ???
+import re
 
+# Getting the input qtrace
 txtIn = "file_to_parse.txt"
+open(txtIn, "rt")	# open the file in "read text" mode
 
-open(txtIn, "rt")
+
+# the regular expression at the heart of this script
+re.findall(r"\w+\s+[0-9a-f]{16}|\w+\s+[0-9a-f]x[0-9a-f]",txt)
+
+
+
+
+
+
+
+
+
+
