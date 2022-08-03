@@ -663,3 +663,72 @@ Instead, we'll use [the `pexpect` package.](https://pexpect.readthedocs.io/en/la
 This is ***so*** much easier to work with than `subprocess` was. I *already* 
 have [a small QEMU-formatted trace](/src/utils/qtrace_first.txt), after about 20 
 minutes of reading and 2 minutes of writing a couple lines of code.
+
+# 2022-08-02
+
+## Daikon
+
+Daikon takes two files as input: a .decls and a .dtrace:
+
+### Decls file
+
+A .decls containes a header and timepoints.
+
+#### Timepoints
+
+Timepoints contain:
+
+- its type
+- elements of state (variables)
+	- variable kind (variable)
+	- declaration and representation type
+	- comparability 
+		- CSRs, GPRs, and FPRs have their own respective comparabilities.
+	- variable name corresponds to register name
+
+Per Calvin's recommendation: declare all variables the same way at 
+`tick():::ENTER` and `tick():::EXIT0`. Additionally, give the same values at 
+enter and exit.
+
+-> Can we have *no* exit values?
+
+
+### dtrace files
+
+A .dtrace consists of a bunch of program points.
+
+#### Program point
+
+Program points have the following:
+
+- a name, with enter or exit
+- a nonce, which is monotonically increasing (1-indexed)
+- every register
+	- name
+	- value
+	- the (believed) hardcoded value 1
+
+There must be a line of whitespace between program points, or Daikon will error. 
+Extra whitespace might be allowed, but that minimum must be present.
+
+qtrace -> 1 dtrace, 1 decls
+
+## Priorities:
+
+1. Get Daikon working and parse qtraces into dtraces
+2. Run Fedora on SiFive emulation and see if it logs different CSRs.
+	-> *it doesn't.*
+
+### Writing qToDaikon
+
+This script needs to take a qtrace, preferably *either* a monitor trace *or* a 
+QEMU log file, and change it into a dtrace. At the heart of this problem is 
+parsing our register values into an internal data structure, such as a list. 
+Conveniently, a lot of that can be handled by this one line of code:
+
+	re.findall("\w+\s+[0-9a-f]{16}|\w+\s+[0-9a-f]x[0-9a-f]",line)
+
+This uses a regular expression to match the labels and registers from the qtrace 
+format into a list of strings, where each string has a register label/value pair 
+that essentially forms a program point. This is something we can quickly comb 
+through and write to a dtrace file.
