@@ -91,3 +91,5 @@ qemu.sendline("q")
 trace.write(str(qemu.before) + "\n\n=====================\n\n")
 
 print("quit QEMU")
+
+trace.close()
