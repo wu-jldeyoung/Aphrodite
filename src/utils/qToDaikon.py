@@ -46,6 +46,7 @@ for l in qt:
 		#print(vals)
 		timepoints.append(vals)
 		oldVals = vals
+#TODO: migrate file writing tasks into this loop
 
 print("We have "+str(len(timepoints))+" unique timepoints")
 
