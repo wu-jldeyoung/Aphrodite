@@ -14,8 +14,7 @@
 # Input:
 # ====================
 # A .txt file with register values as produced by QEMU's 
-# built-in logging function or the monitor output from 
-# `info registers`, at the path specified below.
+# monitor output from `info registers`, at the path specified below.
 # 
 # Output:
 # ====================
@@ -23,31 +22,37 @@
 # directory, with the same timestamp as the input qtrace-*.txt, 
 # now with the new dtrace- prefix.
 #
-# IDEAL FUNCTIONALITY:
-# ====================
-# - this tool is "qtrace-agnostic" (either a log trace or a 
-#   monitor trace)
-#	- support for monitor traces will be prioritized, as
-#	  they contain FPRs.
-#
 # ====================
 
 import re
 
 # Getting the input qtrace
-txtIn = "file_to_parse.txt"
-open(txtIn, "rt")	# open the file in "read text" mode
+txtIn = "trace/qtrace-20220801-151842.txt"
+qt = open(txtIn, "rt")	# open the file in "read text" mode
+
+# Find the timestamp of the input qtrace, and open a dtrace with that timestamp
+tstamp = re.search(r"\d{8}-\d{6}",txtIn).group()
+dt = open(tstamp+".dtrace","wt")	# open in "write text" mode
+					# NOTE: "wt" will OVERWRITE data if file already exists
+
+# Initialize empty list to hold values at each timepoint
+timepoints = []
+
+# loop through lines of qt
+for l in qt:
+	# find all register name/value pairs on current line
+	vals = re.findall(r"\w+\s+[0-9a-f]{16}|\w+\s+[0-9a-f]x[0-9a-f]",l)
+	#print(i)
+	i += 1
+	# append to list of timepoints if nonempty
+	if vals:
+		#print(vals)
+		timepoints.append(vals)
+
+print("We have "+str(len(timepoints))+" timepoints")
 
 
-# the regular expression at the heart of this script
-re.findall(r"\w+\s+[0-9a-f]{16}|\w+\s+[0-9a-f]x[0-9a-f]",txt)
-
-
-
-
-
-
-
-
-
+#close files
+qt.close()
+dt.close()
 

@@ -85,8 +85,6 @@ for i in range(10):
 	qemu.expect("(qemu)")
 	qemu.sendline("info registers")
 
-#time.sleep(10)
-
 # quit QEMU and close the subprocess
 qemu.expect("(qemu)")
 qemu.sendline("q")
