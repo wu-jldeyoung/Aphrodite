@@ -30,12 +30,6 @@ import re
 txtIn = "trace/qtrace-20220801-151842.txt"
 qt = open(txtIn, "rt")	# open the file in "read text" mode
 
-# Find the timestamp of the input qtrace, and open a dtrace with that timestamp
-# If your qtrace doesn't have a timestamp as formatted in qscript.py, 
-tstamp = re.search(r"\d{8}-\d{6}",txtIn).group()
-dt = open(tstamp+".dtrace","wt")	# open in "write text" mode
-					# NOTE: "wt" will OVERWRITE data if file already exists
-
 # Initialize empty list to hold values at each timepoint
 timepoints = []
 
@@ -55,20 +49,41 @@ for l in qt:
 
 print("We have "+str(len(timepoints))+" unique timepoints")
 
+# close qtrace (all data has been read into internal structures)
+qt.close()
+
+# Find the timestamp of the input qtrace, and open a dtrace with that timestamp
+# If your qtrace doesn't have a timestamp as formatted in qscript.py, 
+tstamp = re.search(r"\d{8}-\d{6}",txtIn).group()
+dt = open(tstamp+".dtrace","wt")	# open in "write text" mode
+					# NOTE: "wt" will OVERWRITE data if file already exists
+
+nonce = 1	# the nonce monotonically increases at each program point (timepoint)
+
 # Loop through list of timepoints and write to file
 for i in range(len(timepoints)):
-	print("\nAt timepoint "+str(i)+"\n====================")
-	# Parse register/value pairs into "tuples"
+	print("\nAt nonce "+str(nonce)+"\n====================")
+	tpoint = []	# Holds all register/value lists at the current timepoint
+	dt.write("..tick():::ENTER\nthis_invocation_nonce\n"+str(nonce)+"\n")
+	
+	# Parse register/value pairs into lists
 	for j in range(len(timepoints[i])):
 		reg_val = re.split("\s+",timepoints[i][j])
-		reg = reg_val[0]
-		val = int(reg_val[1],16)
+		reg_val[1] = int(reg_val[1],16)
+		tpoint.append(reg_val)
 		#print(reg_val)
 		# hex string to int: `int("ff",16)` -> 255
-		print("Register "+reg+"\thas value:\t"+str(val))
+		print("Register "+reg_val[0]+"\thas value:\t"+str(reg_val[1]))
+		dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
+	
+	#print(tpoint)
+	dt.write("..tick():::EXIT0\nthis_invocation_nonce\n"+str(nonce)+"\n")
+	for reg_val in tpoint:
+		dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
+	
+	nonce += 1
 
 
-#close files
-qt.close()
+# close dtrace
 dt.close()
 
