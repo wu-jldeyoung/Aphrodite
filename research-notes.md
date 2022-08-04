@@ -732,3 +732,47 @@ This uses a regular expression to match the labels and registers from the qtrace
 format into a list of strings, where each string has a register label/value pair 
 that essentially forms a program point. This is something we can quickly comb 
 through and write to a dtrace file.
+
+# 2022-08-03
+
+## Installing Daikon
+
+Following the [Daikon install instructions](https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Installing-Daikon),
+I unpacked the Daikon distribution, like so:
+
+	$ mkdir ~/Repos/Daikon
+	$ cd ~/Repos/Daikon
+	$ wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.12.tar.gz
+	$ tar zxf daikon-5.8.12.tar.gz
+
+This created a `daikon-5.8.12/` subdirectory. I then executed the following:
+
+	$ export DAIKONDIR=~/Repos/Daikon/daikon-5.8.12
+	$ source $DAIKONDIR/scripts/daikon.bashrc
+
+This output the error message:
+
+	Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc .
+
+I realized I had to install the Java Development Kit, which I did with the 
+following:
+
+	$ sudo apt install default-jdk
+
+and verified installation with:
+
+	$ java -version
+
+Then, I checked that `DAIKONDIR` was still set correctly with `echo`, and I 
+repeated the `source` command transcribed above. This no longer returned an 
+error message, and I checked that it had set the environment variable 
+`JAVA_HOME`, as a sanity check that it had done its work, and sure enough, I got 
+the filepath I expected.
+
+## Continuing qToDaikon
+
+While troubleshooting the above and waiting for installations to finish, I wrote 
+the parts of `qToDaikon.py` that open a `.dtrace` file for writing, and parse 
+the input into a 2D list of timepoints by register name/value strings. Next, we 
+have to take this 2D list and parse the strings inside it, then write those 
+register names and values into a `.dtrace` file in the proper format.
