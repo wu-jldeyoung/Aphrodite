@@ -13,14 +13,13 @@
 # 
 # Input:
 # ====================
-# A .txt file with register values as produced by QEMU's 
-# monitor output from `info registers`, at the path specified below.
+# A .txt file as formatted by qscript.py, at the path specified below.
 # 
 # Output:
 # ====================
 # A properly formatted Daikon trace in the current working 
 # directory, with the same timestamp as the input qtrace-*.txt, 
-# now with the new dtrace- prefix.
+# now as a Daikon .dtrace file.
 #
 # ====================
 
