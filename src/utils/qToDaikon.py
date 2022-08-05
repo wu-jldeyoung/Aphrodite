@@ -30,60 +30,55 @@ import re
 txtIn = "trace/qtrace-20220801-151842.txt"
 qt = open(txtIn, "rt")	# open the file in "read text" mode
 
-# Initialize empty list to hold values at each timepoint
-timepoints = []
-
-oldVals = []
-vals = []
-
-# loop through lines of qt
-for l in qt:
-	# find all register name/value pairs on current line
-	vals = re.findall(r"[a-z0-9/]+\s+[0-9a-f]{16}|\w+\s+[0-9a-f]x[0-9a-f]",l)
-
-	# append to list of timepoints if nonempty
-	if vals != oldVals and vals:
-		#print(vals)
-		timepoints.append(vals)
-		oldVals = vals
-
-print("We have "+str(len(timepoints))+" unique timepoints")
-
-# close qtrace (all data has been read into internal structures)
-qt.close()
-
 # Find the timestamp of the input qtrace, and open a dtrace with that timestamp
 # If your qtrace doesn't have a timestamp as formatted in qscript.py, 
 tstamp = re.search(r"\d{8}-\d{6}",txtIn).group()
 dt = open(tstamp+".dtrace","wt")	# open in "write text" mode
-					# NOTE: "wt" will OVERWRITE data if file already exists
+					# NOTE: "wt" will OVERWRITE data if file exists
+
+# Initialize empty lists for previous and current register values
+oldVals = []
+vals = []
 
 nonce = 1	# the nonce monotonically increases at each program point (timepoint)
 
-# Loop through list of timepoints and write to file
-for i in range(len(timepoints)):
-	print("\nAt nonce "+str(nonce)+"\n====================")
-	tpoint = []	# Holds all register/value lists at the current timepoint
-	dt.write("..tick():::ENTER\nthis_invocation_nonce\n"+str(nonce)+"\n")
-	
-	# Parse register/value pairs into lists
-	for j in range(len(timepoints[i])):
-		reg_val = re.split("\s+",timepoints[i][j])
-		reg_val[1] = int(reg_val[1],16)
-		tpoint.append(reg_val)
-		#print(reg_val)
-		# hex string to int: `int("ff",16)` -> 255
-		print("Register "+reg_val[0]+"\thas value:\t"+str(reg_val[1]))
-		dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
-	
-	#print(tpoint)
-	dt.write("..tick():::EXIT0\nthis_invocation_nonce\n"+str(nonce)+"\n")
-	for reg_val in tpoint:
-		dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
-	
-	nonce += 1
+# loop through lines of qt
+for l in qt:
+	# find all register name/value pairs on current line
+	# returns empty list if no register values found
+	vals = re.findall(r"[a-z0-9/]+\s+[0-9a-f]{16}|\w+\s+[0-9a-f]x[0-9a-f]",l)
 
+	# write timepoint to trace if nonempty and not equal to the previous cycle
+	if vals != oldVals and vals:
+		#print(vals)
+		oldVals = vals
+		# Holds all register/value lists at the current timepoint
+		tpoint = []
+		# entering program point
+		dt.write("..tick():::ENTER\nthis_invocation_nonce\n"+str(nonce)+"\n")
+		
+		# Parse register/value pairs into lists
+		for reg in vals:
+			reg_val = re.split("\s+",reg)
+			# hex string to int: `int("ff",16)` -> 255
+			reg_val[1] = int(reg_val[1],16)
+			# register name\n value \n constant 1
+			dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
+			# for copying these values into the tick exit
+			tpoint.append(reg_val)
+		
+		# exiting program point, passing in same values as entry
+		dt.write("..tick():::EXIT0\nthis_invocation_nonce\n"+str(nonce)+"\n")
+		for reg_val in tpoint:
+			dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
+		
+		nonce += 1	# finished with this timepoint, increment nonce for the next.
 
-# close dtrace
+print("Trace converted!")
+
+# close qtrace (all data has been read into internal structures)
+qt.close()
+
+# close dtrace (all values have been written to file)
 dt.close()
 
