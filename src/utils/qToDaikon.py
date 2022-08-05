@@ -17,22 +17,22 @@
 # 
 # Output:
 # ====================
-# A properly formatted Daikon trace in the current working 
-# directory, with the same timestamp as the input qtrace-*.txt, 
-# now as a Daikon .dtrace file.
+# A properly formatted Daikon trace in the trace subdirectory of
+# the current working directory, with the same timestamp as the  
+# input qtrace-*.txt, now as a Daikon .dtrace file.
 #
 # ====================
 
 import re
 
 # Getting the input qtrace
-txtIn = "trace/qtrace-20220801-151842.txt"
+txtIn = "trace/qtrace-20220804-121654.txt"
 qt = open(txtIn, "rt")	# open the file in "read text" mode
 
 # Find the timestamp of the input qtrace, and open a dtrace with that timestamp
 # If your qtrace doesn't have a timestamp as formatted in qscript.py, 
 tstamp = re.search(r"\d{8}-\d{6}",txtIn).group()
-dt = open(tstamp+".dtrace","wt")	# open in "write text" mode
+dt = open("trace/"+tstamp+".dtrace","wt")	# open in "write text" mode
 					# NOTE: "wt" will OVERWRITE data if file exists
 
 # Initialize empty lists for previous and current register values
@@ -54,7 +54,7 @@ for l in qt:
 		# Holds all register/value lists at the current timepoint
 		tpoint = []
 		# entering program point
-		dt.write("..tick():::ENTER\nthis_invocation_nonce\n"+str(nonce)+"\n")
+		dt.write("\n..tick():::ENTER\nthis_invocation_nonce\n"+str(nonce)+"\n")
 		
 		# Parse register/value pairs into lists
 		for reg in vals:
@@ -67,7 +67,7 @@ for l in qt:
 			tpoint.append(reg_val)
 		
 		# exiting program point, passing in same values as entry
-		dt.write("..tick():::EXIT0\nthis_invocation_nonce\n"+str(nonce)+"\n")
+		dt.write("\n..tick():::EXIT0\nthis_invocation_nonce\n"+str(nonce)+"\n")
 		for reg_val in tpoint:
 			dt.write(reg_val[0]+"\n"+str(reg_val[1])+"\n1\n")
 		
