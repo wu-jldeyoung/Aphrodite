@@ -785,3 +785,13 @@ more often than the values are actually updated. To find the number of *unique*
 timesteps, we compare the value of every register at the current timepoint to 
 the corresponding value at the previous timepoint using list equality. We only 
 append a timepoint to the list of timepoints if it passes this uniqueness check.
+
+Now we have a toolchain to run QEMU, generate a trace, and parse that trace into 
+Daikon format. The next step is to generate the `.decls`, which I did with the 
+script `make_decls.py`, which takes lists of the CSRs, GPRs, and FPRs, and gives 
+each category its own comparability. This *should* only need to be generated 
+once, and I've included the resulting `universal.decls` here, under src/utils.
+
+Our next step will be to combine `qscript.py` and `qToDaikon.py` into a single 
+`make_dtrace.py`, which both runs QEMU on an ELF file, *and* generates a 
+`.dtrace`. Now that we have all the pieces in place, this should go smoothly.
