@@ -1,4 +1,4 @@
-# 2022-05-25
+#### 2022-05-25
 
 Starting from Ubuntu 20.04
 
@@ -18,7 +18,7 @@ dependencies:
 	  libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc 
 	  zlib1g-dev
 
-# 2022-06-10
+### 2022-06-10
 
 https://youtu.be/27tndT6cBH0
 https://pulp-platform.org/docs/riscv_workshop_zurich/schiavone_wosh2019_tutorial.pdf
@@ -29,9 +29,9 @@ https://pulp-platform.org/docs/riscv_workshop_zurich/schiavone_wosh2019_tutorial
 - PULPissimo architecture
 	- RISC-V based microcontroller with peripherals
 		
-# 2022-06-16
+### 2022-06-16
 
-## meeting notes:
+# meeting notes:
 
 Adding PATH variables
 
@@ -46,7 +46,7 @@ Adding PATH variables
 
 - Look at Qemu -- emulation environment (runs test suite)
 	
-## work progress
+# work progress
 
 adding to PATH
 	
@@ -63,7 +63,7 @@ adding to PATH
 			   installation
 	$ make linux
 
-# 2022-06-21
+### 2022-06-21
 
 The problem wasn't my PATH. What I needed to do was:
 
@@ -86,7 +86,7 @@ The successful one was the Newlib version, which uses the commands:
 	$ ./configure --prefix=/opt/riscv
 	$ make
 
-# 2022-06-22
+### 2022-06-22
 
 Installing and configuring Qemu: https://wiki.qemu.org/Hosts/Linux
 
@@ -132,7 +132,7 @@ to PATH, although I'm not sure what directory I'll find it in.
 	$ # Need qemu-riscv32 or qemu-riscv64 in your `PATH`.
 	$ make check-gcc-linux
 
-# 2022-07-08
+### 2022-07-08
 
 parallel process: generate traces from *anything* on qemu
 
@@ -147,9 +147,9 @@ PROCESS OVERVIEW (high-level):
 
 IMMEDIATE GOAL: emulate the RISC-V ISA and run Linux.
 	
-# 2022-07-11
+### 2022-07-11
 	
-## Simulation vs. Emulation
+# Simulation vs. Emulation
 
 - simulation runs like a whole processor, with wires and all
 - emulation recreates an ISA
@@ -189,7 +189,7 @@ Shutdown:
 See [the session transcript](/fedora-session-2022-07-11.txt) for more details.
 
 
-# 2022-07-12
+### 2022-07-12
 
 getting register values through DEBUG ports
 	
@@ -202,7 +202,7 @@ Try new risc-v C compilers
 Inspired by our meeting this morning, I did some background reading on RISC,
 MIPS, and ARM.
 
-## Why would Intel choose not to use a RISC approach?
+# Why would Intel choose not to use a RISC approach?
 
 CISC architecture allows for "higher programming productivity" in Assembly. It 
 also means fewer instructions will be used to compile high-level programs.
@@ -227,11 +227,11 @@ Bash tutorial: figuring out if there's a new file
 	$ cat diff.txt
 	
 
-# 2022-07-13
+### 2022-07-13
 
 Memory sinkhole--differences between CISC and RISC designs
 
-## Configuring the new toolchain
+# Configuring the new toolchain
 
 Since the PULP toolchain is for PULP architecture and not the Qemu `virt` 
 machine, I grabbed the riscv-gnu-toolchain instead:
@@ -261,7 +261,7 @@ result:
 I have *never* in my life been so happy to encounter a compile error. Now, we 
 work on finding out what the hell went wrong.
 
-# 2022-07-13
+### 2022-07-13
 
 Test program: change the value of a register and detect that it was changed:
 
@@ -299,7 +299,7 @@ error codes:
 I'm not sure what that means, so we'll just move on for the time being.
 [Revisited on 2022-07-18](#2022-07-18)
 
-## Running the [assembly Hello World](https://theintobooks.wordpress.com/2019/12/28/hello-world-on-risc-v-with-qemu/#comments)
+# Running the [assembly Hello World](https://theintobooks.wordpress.com/2019/12/28/hello-world-on-risc-v-with-qemu/#comments)
 
 After copying the included assembly into a file called `hello.s`, I created the 
 makefile and [linker script](https://github.com/michaeljclark/riscv-probe/blob/master/env/qemu-sifive_u/default.lds) 
@@ -320,7 +320,7 @@ tried the following, and this seemed to work:
 The process teminated, and I verified that there were executable files in 
 `/opt/riscv/bin`.
 
-# 2022-07-15
+### 2022-07-15
 
 I finally figured out how to invoke my newly configured `riscv-gcc`, with the 
 following command:
@@ -424,7 +424,7 @@ of keystrokes produced the output:
 This gives us a process to execute arbitrary RISC-V assembly programs using our 
 Qemu emulator. Next step: generate a trace.
 
-# 2022-07-18
+### 2022-07-18
 
 Building `riscv-tools` so that we can use `riscv-probe` to "probe control and 
 status registers." After several failed attempts, I realized that my `$RISCV` 
@@ -456,11 +456,11 @@ suppose I *could* try casting the zeroes to `int *` type:
 
 	__clear_cache((int *)0, (int *)0);
 
-## Switching Gears
+# Switching Gears
 
 Let's look into Qemu features that might allow us to look at register values.
 
-### Monitor
+## Monitor
 
 The `-monitor` flag lets us view the register contents at a fixed point in time, 
 by executing `info registers` in the monitor console. However, I do not believe 
@@ -469,7 +469,7 @@ course, I could configure a character device driver that sends monitor info to a
 log file. That seems like more trouble than it's worth, for a result that's less 
 than optimal.
 
-### gdb (GNU Debugger)
+## gdb (GNU Debugger)
 
 Launching our emulator with the `-s` and `-S` flags makes it listen for an 
 incoming TCP connection on port 1234, from gdb, and wait until gdb tells it to 
@@ -488,9 +488,9 @@ to look at the `vmlinux` executable.
 
 Everything I've tried creates these error messages.
 
-# 2022-07-19
+### 2022-07-19
 
-## riscv-tools
+# riscv-tools
 
 According to an issue report on the GH repo that mentioned the same compile 
 error I got, the `riscv-tools` repository is no longer maintained, so I'm going 
@@ -507,13 +507,13 @@ failing.
 Config failed on the up-to-date version. Reviewing the log file indicates that 
 my version of the riscv-gcc is different than what this package expects.
 
-# 2022-07-20
+### 2022-07-20
 
 Not much progress was made today. I worked on creating the Fedora boot demo with
 `info registers` accesses, and starting to parse through bits of the QEMU source
 to attempt some fprintf hacking.
 
-# 2022-07-21
+### 2022-07-21
 
 0) Demo 					*Done!*
 1) QEMU sprintf hacking 	*Not close enough for comfort*
@@ -521,19 +521,19 @@ to attempt some fprintf hacking.
 For tomorrow
 2) QEMU wrapper
 
-## QEMU wrapper
+# QEMU wrapper
 
 Using the `-S` flag prevents the CPU from starting, and requires a `cont` 
 command to proceed with execution. This will be useful to include in my wrapper 
 script.
 
-### Other useful monitor commands:
+## Other useful monitor commands:
 
 - `stop`:		stops execution of VM
 - `c`/`cont`:	resumes execution
 - `logfile`:	write logs to the specified file (instead of default)
 
-### Wrapper goals:
+## Wrapper goals:
 
 1. Start QEMU with a linked ELF as input
 	- start the VM paused (`-S`)
@@ -553,11 +553,11 @@ script.
 				   monitor console, does that mean the user can issue a `quit`?
 				-> does the user ping the program, or the monitor?
 
-# 2022-07-22
+### 2022-07-22
 
 GOAL: Get a Python script that starts QEMU and can write commands to monitor.
 
-### Investigating singlestep
+## Investigating singlestep
 
 There is a monitor option that runs in "single-step" mode. I have attempted to 
 run it on my Hello World program, with no detectable result so far.
@@ -589,9 +589,9 @@ Thus,
 produces the log [hello.txt](/hello_log.txt). A similar effect can be achieved with 
 `logfile ./hello_log.txt` in the monitor.
 
-# 2022-07-25
+### 2022-07-25
 
-## Writing the Python wrapper script
+# Writing the Python wrapper script
 
 It looks like the subprocess module for Python is the best way to run Qemu 
 inside a Python script, as it gives us flexibility of where to route the child 
@@ -604,9 +604,9 @@ the same thing with a subprocess.
 Looking at the documentation, I discovered that `subprocess.call("*",shell=True)` 
 functions as basically a 1:1 replacement for `os.system`.
 
-# 2022-07-29
+### 2022-07-29
 
-## Understanding [Subprocess](https://docs.python.org/3/library/subprocess.html)
+# Understanding [Subprocess](https://docs.python.org/3/library/subprocess.html)
 
 After lots of reading and tinkering with the `subprocess` module, I have 
 discovered a few things.
@@ -647,7 +647,7 @@ causing a loss of the information that was contained in it.
 and receiving data. I believe I will want to use the `Popen` object's I/O 
 streams to send and recieve data.
 
-# 2022-08-01
+#### 2022-08-01
 
 1. Troubleshoot concurrency
 1. Work QEMU with concurrency know-how
@@ -664,17 +664,17 @@ This is ***so*** much easier to work with than `subprocess` was. I *already*
 have [a small QEMU-formatted trace](/src/utils/qtrace_first.txt), after about 20 
 minutes of reading and 2 minutes of writing a couple lines of code.
 
-# 2022-08-02
+#### 2022-08-02
 
-## Daikon
+# Daikon
 
 Daikon takes two files as input: a .decls and a .dtrace:
 
-### Decls file
+## Decls file
 
 A .decls containes a header and timepoints.
 
-#### Timepoints
+### Timepoints
 
 Timepoints contain:
 
@@ -693,11 +693,11 @@ enter and exit.
 -> Can we have *no* exit values?
 
 
-### dtrace files
+## dtrace files
 
 A .dtrace consists of a bunch of program points.
 
-#### Program point
+### Program point
 
 Program points have the following:
 
@@ -713,13 +713,13 @@ Extra whitespace might be allowed, but that minimum must be present.
 
 qtrace -> 1 dtrace, 1 decls
 
-## Priorities:
+# Priorities:
 
 1. Get Daikon working and parse qtraces into dtraces
 2. Run Fedora on SiFive emulation and see if it logs different CSRs.
 	-> *it doesn't.*
 
-### Writing qToDaikon
+## Writing qToDaikon
 
 This script needs to take a qtrace, preferably *either* a monitor trace *or* a 
 QEMU log file, and change it into a dtrace. At the heart of this problem is 
@@ -733,9 +733,9 @@ format into a list of strings, where each string has a register label/value pair
 that essentially forms a program point. This is something we can quickly comb 
 through and write to a dtrace file.
 
-# 2022-08-03
+### 2022-08-03
 
-## Installing Daikon
+# Installing Daikon
 
 Following the [Daikon install instructions](https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Installing-Daikon),
 I unpacked the Daikon distribution, like so:
@@ -769,10 +769,19 @@ error message, and I checked that it had set the environment variable
 `JAVA_HOME`, as a sanity check that it had done its work, and sure enough, I got 
 the filepath I expected.
 
-## Continuing qToDaikon
+# Continuing qToDaikon
 
 While troubleshooting the above and waiting for installations to finish, I wrote 
 the parts of `qToDaikon.py` that open a `.dtrace` file for writing, and parse 
 the input into a 2D list of timepoints by register name/value strings. Next, we 
 have to take this 2D list and parse the strings inside it, then write those 
 register names and values into a `.dtrace` file in the proper format.
+
+### 2022-08-04
+
+In our `qscript` output, we notice that we are logging duplicate register values 
+at many different timepoints, because we are receiving `info registers` outputs 
+more often than the values are actually updated. To find the number of *unique* 
+timesteps, we compare the value of every register at the current timepoint to 
+the corresponding value at the previous timepoint using list equality. We only 
+append a timepoint to the list of timepoints if it passes this uniqueness check.
