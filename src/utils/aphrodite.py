@@ -30,14 +30,14 @@ drv = path+"Fedora-Minimal-Rawhide-20200108.n.0-sda.raw" # for booting Linux, gi
 #exe = path+"hello"
 
 # timeout in minutes
-timeout = 1
+timeout = 120
 
 # get current time for file-naming
 init = datetime.datetime.now()
 tSim = init.strftime("%Y%m%d-%H%M%S")
 
 # generate datetime of timeout
-end = datetime.datetime(init.year, init.month, init.day, init.hour, (init.minute+timeout)%60, init.second)
+end = datetime.datetime(init.year, init.month, init.day, init.hour+int(timeout/60), (init.minute+timeout)%60, init.second)
 
 # commandline arguments for QEMU, tokenized according to shlex.split()
 args = ["-machine", 
