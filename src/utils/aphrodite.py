@@ -19,9 +19,15 @@ import datetime
 import shlex
 import time
 import re
+import os
 
 # location of a linked ELF file compiled for riscv64
-path = "/home/jldey/Desktop/riscv-hello-world/asm/hello"
+path = "/home/jldey/Downloads/riscv-fedora-images/" # directory where elf file is located
+exe = path+"Fedora-Minimal-Rawhide-20200108.n.0-fw_payload-uboot-qemu-virt-smode.elf" # name of elf file
+drv = path+"Fedora-Minimal-Rawhide-20200108.n.0-sda.raw" # for booting Linux, gives "drive" option for QEMU
+
+#path = "/home/jldey/Desktop/riscv-hello-world/asm/"
+#exe = path+"hello"
 
 # timeout in minutes
 timeout = 1
@@ -31,22 +37,34 @@ init = datetime.datetime.now()
 tSim = init.strftime("%Y%m%d-%H%M%S")
 
 # generate datetime of timeout
-end = datetime.datetime(init.year, init.month, init.day, init.hour, init.minute+timeout, init.second)
+end = datetime.datetime(init.year, init.month, init.day, init.hour, (init.minute+timeout)%60, init.second)
 
 # commandline arguments for QEMU, tokenized according to shlex.split()
-args = ["qemu-system-riscv64", 
-	"-machine", 
+args = ["-machine", 
 	"virt", 	# see QEMU documentation for more details, or use qemu-system-riscv64 -machine help
-	"-kernel", path, 	# launches the file at path on the guest system
+	"-kernel", exe, 	# launches the file at path on the guest system
 	"-monitor", "stdio", 	# sends QEMU monitor to stdio (specified below in the subprocess call)
 	"-S",			# starts the guest paused
 	
+	# options for running Fedora
+	"-smp","4",
+	"-m","2G",
+	"-bios", "none",
+   	"-object", "rng-random,filename=/dev/urandom,id=rng0",
+   	"-device", "virtio-rng-device,rng=rng0",
+   	"-device", "virtio-blk-device,drive=hd0",
+   	"-drive", "file="+drv+",format=raw,id=hd0",
+   	"-device", "virtio-net-device,netdev=usernet",
+   	"-netdev", "user,id=usernet,hostfwd=tcp::10000-:22"
+	]
 	# These options from deprecated version of qscript.py. 
 	# They are not necessary, and are included for
 	#"-d", "cpu",		# logs cpu state (register values) to file specified by -D
 	#"-D",			# creates log file with the below name in the current working directory
 	#"./logs/qpyLog"+tSim+".txt"
-	]
+
+#os.system("qemu-system-riscv64 "+" ".join(args))
+	
 
 # Initialize empty lists for previous and current register values
 oldVals = []
@@ -59,12 +77,12 @@ nonce = 1	# the nonce monotonically increases at each program point (timepoint)
 dt = open("trace/"+tSim+".dtrace", "xt")
 
 
-# run QEMU with args as arguments, shell-escaped for security
-qemu = px.spawn(shlex.join(args))
+# run QEMU with args as arguments
+qemu = px.spawn("qemu-system-riscv64", args, encoding="utf-8")
 print("child process created")
 
 # grab initial state
-qemu.expect(".*\r\n(qemu)")
+qemu.expect(".*(qemu)")
 qemu.sendline("info registers")
 
 # tell QEMU to continue execution ("c")
@@ -72,11 +90,15 @@ qemu.expect("(qemu)")
 qemu.sendline("c")
 print("continuing")
 
+
 # while not timed out
 while datetime.datetime.now() < end:
 	
+	#print("In while loop")
+	
 	# grab `info registers` output
-	out = str(qemu.before)
+	out = qemu.before
+	#print(out)
 	
 	# find all register name/value pairs on current line
 	# returns empty list if no register values found,
