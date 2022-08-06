@@ -23,7 +23,7 @@ import os
 
 # location of a linked ELF file compiled for riscv64
 path = "/home/jldey/Downloads/riscv-fedora-images/" # directory where elf file is located
-exe = path+"Fedora-Minimal-Rawhide-*-fw_payload-uboot-qemu-virt-smode.elf" # name of elf file
+exe = path+"Fedora-Minimal-Rawhide-20200108.n.0-fw_payload-uboot-qemu-virt-smode.elf" # name of elf file
 drv = path+"Fedora-Minimal-Rawhide-20200108.n.0-sda.raw" # for booting Linux, gives "drive" option for QEMU
 
 #path = "/home/jldey/Desktop/riscv-hello-world/asm/"
@@ -78,16 +78,11 @@ dt = open("trace/"+tSim+".dtrace", "xt")
 
 
 # run QEMU with args as arguments
-qemu = px.spawn("qemu-system-riscv64", args, maxread=10000, encoding="utf-8")
+qemu = px.spawn("qemu-system-riscv64", args, encoding="utf-8")
 print("child process created")
 
-print(qemu.readline())
-print(qemu.readline())
-print(qemu.readline())
-print(qemu.readline())
-
 # grab initial state
-qemu.expect(".*\r\n(qemu)")
+qemu.expect(".*(qemu)")
 qemu.sendline("info registers")
 
 # tell QEMU to continue execution ("c")
