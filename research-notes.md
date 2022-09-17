@@ -793,5 +793,36 @@ each category its own comparability. This *should* only need to be generated
 once, and I've included the resulting `universal.decls` here, under src/utils.
 
 Our next step will be to combine `qscript.py` and `qToDaikon.py` into a single 
-`make_dtrace.py`, which both runs QEMU on an ELF file, *and* generates a 
-`.dtrace`. Now that we have all the pieces in place, this should go smoothly.
+tool, which both runs QEMU on an ELF file, *and* generates a `.dtrace`. Now that 
+we have all the pieces in place, this should go smoothly.
+
+### 2022-08-05
+
+Now having a `.decls` and a `.dtrace`, I ran Daikon on these files:
+
+	java daikon.Daikon ~/Desktop/riscv-tracegen/src/utils/universal.decls ~/Desktop/riscv-tracegen/src/utils/20220801-151842.dtrace
+
+After a couple of failed attempts, because I had forgotten to include proper 
+whitespace in my `.dtrace`, this run produced the output (a list of properties) 
+found in [hello_props.txt](hello_props.txt). The properties discovered here are 
+exactly what we would expect: most of the registers are equal to each other with 
+value 0, and a few were changed to one nonzero value (except the program counter 
+`pc`, which had two nonzero values, which, again, is as expected. The registers 
+were also grouped in the categories I specified with the `comparability` 
+property, CSRs, GPRs, and FPRs.
+
+# Aphrodite
+
+Our overall tool, combining the trace generation from `qscript` and the `.dtrace`
+formatting from `qToDaikon`, called Aphrodite, takes a RISC-V executable and a 
+timeout in minutes, executing QEMU and writing a well-formatted dtrace. I have 
+verified Aphrodite's correctness with our bare-metal hello world program, and 
+will now use Aphrodite to boot Linux with a 20-minute timeout, to see how much 
+data it generates. After that, I'll run it with a longer timeout (hopefully, 2 
+hours).
+
+After much debugging, I was able to get Aphrodite to successfully boot Linux. 
+Much to my surprise, the boot process completed in less than an hour, and I was 
+able to log in and do a couple basic shell commands at the terminal, before 
+engaging the shutdown sequence. This resulted in [a 15.7 MB trace](src/utils/trace/20220805-181853.dtrace) 
+that contains 6,484 program points.
