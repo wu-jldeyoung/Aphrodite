@@ -1,0 +1,327 @@
+Daikon version 5.8.12, released July 14, 2022; http://plse.cs.washington.edu/daikon.
+Reading declaration files .(read 1 decls file)
+Processing trace data; reading 1 dtrace file:
+
+===========================================================================
+..tick():::ENTER
+f21/fs5 == f26/fs10
+pc != 0
+mhartid == 0
+mip >= 0
+mideleg one of { 0, 546 }
+medeleg one of { 0, 45321 }
+mtvec one of { 0, 2147484904L }
+x0/zero == 0
+f0/ft0 >= 0
+f5/ft5 >= 0
+f6/ft6 >= 0
+f7/ft7 >= 0
+f12/fa2 >= 0
+f13/fa3 >= 0
+f14/fa4 >= 0
+f16/fa6 >= 0
+f19/fs3 one of { 0, 4607182418800017408L }
+f20/fs4 one of { -4616189618054758400L, 0 }
+f21/fs5 one of { 0, 4472406533629990549L }
+f22/fs6 >= 0
+f23/fs7 >= 0
+f24/fs8 one of { 0, 4607182418800017408L }
+f25/fs9 one of { -4616189618054758400L, 0 }
+f27/fs11 == 0
+f28/ft8 one of { 0, 4621819117588971520L, 4696837146684686336L }
+f29/ft9 one of { 0, 4619567317775286272L, 4701866097363707232L }
+f30/ft10 one of { 0, 4606900943823306752L }
+f31/ft11 one of { 0, 4620658033310040064L }
+pc != mhartid
+pc != mstatus
+pc != mip
+pc != mie
+pc != mideleg
+pc != medeleg
+pc != mcause
+mhartid <= mip
+mhartid <= mie
+mhartid <= mideleg
+mhartid <= medeleg
+mhartid <= mtvec
+mstatus <= mtvec
+mip <= mie
+mip <= mideleg
+mip <= medeleg
+mip <= mtvec
+mie <= mtvec
+mideleg <= medeleg
+mideleg <= mtvec
+mideleg >= mcause
+medeleg <= mtvec
+medeleg >= mcause
+mtvec >= mcause
+f0/ft0 >= f20/fs4
+f0/ft0 >= f25/fs9
+f0/ft0 >= f27/fs11
+f0/ft0 >= f30/ft10
+f0/ft0 >= f31/ft11
+f5/ft5 >= f20/fs4
+f5/ft5 >= f25/fs9
+f5/ft5 >= f27/fs11
+f6/ft6 <= f7/ft7
+f6/ft6 >= f20/fs4
+f6/ft6 >= f25/fs9
+f6/ft6 >= f27/fs11
+f6/ft6 >= f30/ft10
+f7/ft7 >= f20/fs4
+f7/ft7 >= f25/fs9
+f7/ft7 >= f27/fs11
+f7/ft7 >= f30/ft10
+f7/ft7 >= f31/ft11
+f12/fa2 >= f20/fs4
+f12/fa2 >= f25/fs9
+f12/fa2 >= f27/fs11
+f13/fa3 >= f20/fs4
+f13/fa3 >= f25/fs9
+f13/fa3 >= f27/fs11
+f14/fa4 >= f20/fs4
+f14/fa4 >= f21/fs5
+f14/fa4 >= f25/fs9
+f14/fa4 >= f27/fs11
+f14/fa4 >= f30/ft10
+f14/fa4 >= f31/ft11
+f16/fa6 >= f20/fs4
+f16/fa6 >= f25/fs9
+f16/fa6 >= f27/fs11
+f18/fs2 >= f20/fs4
+f19/fs3 >= f20/fs4
+f19/fs3 >= f21/fs5
+f19/fs3 >= f24/fs8
+f19/fs3 >= f25/fs9
+f19/fs3 >= f27/fs11
+f20/fs4 <= f21/fs5
+f20/fs4 <= f22/fs6
+f20/fs4 <= f23/fs7
+f20/fs4 <= f24/fs8
+f20/fs4 <= f25/fs9
+f20/fs4 <= f27/fs11
+f20/fs4 <= f28/ft8
+f20/fs4 <= f29/ft9
+f20/fs4 <= f30/ft10
+f20/fs4 <= f31/ft11
+f21/fs5 >= f25/fs9
+f21/fs5 >= f27/fs11
+f22/fs6 >= f25/fs9
+f22/fs6 >= f27/fs11
+f23/fs7 >= f25/fs9
+f23/fs7 >= f27/fs11
+f24/fs8 >= f25/fs9
+f24/fs8 >= f27/fs11
+f25/fs9 <= f27/fs11
+f25/fs9 <= f28/ft8
+f25/fs9 <= f29/ft9
+f25/fs9 <= f30/ft10
+f25/fs9 <= f31/ft11
+f27/fs11 <= f28/ft8
+f27/fs11 <= f29/ft9
+f27/fs11 <= f30/ft10
+f27/fs11 <= f31/ft11
+f28/ft8 >= f30/ft10
+f28/ft8 >= f31/ft11
+f29/ft9 >= f30/ft10
+f30/ft10 <= f31/ft11
+===========================================================================
+..tick():::EXIT
+pc == orig(pc)
+mhartid == orig(mhartid)
+mstatus == orig(mstatus)
+mip == orig(mip)
+mie == orig(mie)
+mideleg == orig(mideleg)
+medeleg == orig(medeleg)
+mtvec == orig(mtvec)
+mepc == orig(mepc)
+mcause == orig(mcause)
+x0/zero == orig(x0/zero)
+x1/ra == orig(x1/ra)
+x2/sp == orig(x2/sp)
+x3/gp == orig(x3/gp)
+x4/tp == orig(x4/tp)
+x5/t0 == orig(x5/t0)
+x6/t1 == orig(x6/t1)
+x7/t2 == orig(x7/t2)
+x8/s0 == orig(x8/s0)
+x9/s1 == orig(x9/s1)
+x10/a0 == orig(x10/a0)
+x11/a1 == orig(x11/a1)
+x12/a2 == orig(x12/a2)
+x13/a3 == orig(x13/a3)
+x14/a4 == orig(x14/a4)
+x15/a5 == orig(x15/a5)
+x16/a6 == orig(x16/a6)
+x17/a7 == orig(x17/a7)
+x18/s2 == orig(x18/s2)
+x19/s3 == orig(x19/s3)
+x20/s4 == orig(x20/s4)
+x21/s5 == orig(x21/s5)
+x22/s6 == orig(x22/s6)
+x23/s7 == orig(x23/s7)
+x24/s8 == orig(x24/s8)
+x25/s9 == orig(x25/s9)
+x26/s10 == orig(x26/s10)
+x27/s11 == orig(x27/s11)
+x28/t3 == orig(x28/t3)
+x29/t4 == orig(x29/t4)
+x30/t5 == orig(x30/t5)
+x31/t6 == orig(x31/t6)
+f0/ft0 == orig(f0/ft0)
+f1/ft1 == orig(f1/ft1)
+f2/ft2 == orig(f2/ft2)
+f3/ft3 == orig(f3/ft3)
+f4/ft4 == orig(f4/ft4)
+f5/ft5 == orig(f5/ft5)
+f6/ft6 == orig(f6/ft6)
+f7/ft7 == orig(f7/ft7)
+f8/fs0 == orig(f8/fs0)
+f9/fs1 == orig(f9/fs1)
+f10/fa0 == orig(f10/fa0)
+f11/fa1 == orig(f11/fa1)
+f12/fa2 == orig(f12/fa2)
+f13/fa3 == orig(f13/fa3)
+f14/fa4 == orig(f14/fa4)
+f15/fa5 == orig(f15/fa5)
+f16/fa6 == orig(f16/fa6)
+f17/fa7 == orig(f17/fa7)
+f18/fs2 == orig(f18/fs2)
+f19/fs3 == orig(f19/fs3)
+f20/fs4 == orig(f20/fs4)
+f21/fs5 == f26/fs10
+f21/fs5 == orig(f21/fs5)
+f21/fs5 == orig(f26/fs10)
+f22/fs6 == orig(f22/fs6)
+f23/fs7 == orig(f23/fs7)
+f24/fs8 == orig(f24/fs8)
+f25/fs9 == orig(f25/fs9)
+f27/fs11 == orig(f27/fs11)
+f28/ft8 == orig(f28/ft8)
+f29/ft9 == orig(f29/ft9)
+f30/ft10 == orig(f30/ft10)
+f31/ft11 == orig(f31/ft11)
+pc != 0
+mhartid == 0
+mip >= 0
+mideleg one of { 0, 546 }
+medeleg one of { 0, 45321 }
+mtvec one of { 0, 2147484904L }
+x0/zero == 0
+f0/ft0 >= 0
+f5/ft5 >= 0
+f6/ft6 >= 0
+f7/ft7 >= 0
+f12/fa2 >= 0
+f13/fa3 >= 0
+f14/fa4 >= 0
+f16/fa6 >= 0
+f19/fs3 one of { 0, 4607182418800017408L }
+f20/fs4 one of { -4616189618054758400L, 0 }
+f21/fs5 one of { 0, 4472406533629990549L }
+f22/fs6 >= 0
+f23/fs7 >= 0
+f24/fs8 one of { 0, 4607182418800017408L }
+f25/fs9 one of { -4616189618054758400L, 0 }
+f27/fs11 == 0
+f28/ft8 one of { 0, 4621819117588971520L, 4696837146684686336L }
+f29/ft9 one of { 0, 4619567317775286272L, 4701866097363707232L }
+f30/ft10 one of { 0, 4606900943823306752L }
+f31/ft11 one of { 0, 4620658033310040064L }
+pc != mhartid
+pc != mstatus
+pc != mip
+pc != mie
+pc != mideleg
+pc != medeleg
+pc != mcause
+mhartid <= mip
+mhartid <= mie
+mhartid <= mideleg
+mhartid <= medeleg
+mhartid <= mtvec
+mstatus <= mtvec
+mip <= mie
+mip <= mideleg
+mip <= medeleg
+mip <= mtvec
+mie <= mtvec
+mideleg <= medeleg
+mideleg <= mtvec
+mideleg >= mcause
+medeleg <= mtvec
+medeleg >= mcause
+mtvec >= mcause
+f0/ft0 >= f20/fs4
+f0/ft0 >= f25/fs9
+f0/ft0 >= f27/fs11
+f0/ft0 >= f30/ft10
+f0/ft0 >= f31/ft11
+f5/ft5 >= f20/fs4
+f5/ft5 >= f25/fs9
+f5/ft5 >= f27/fs11
+f6/ft6 <= f7/ft7
+f6/ft6 >= f20/fs4
+f6/ft6 >= f25/fs9
+f6/ft6 >= f27/fs11
+f6/ft6 >= f30/ft10
+f7/ft7 >= f20/fs4
+f7/ft7 >= f25/fs9
+f7/ft7 >= f27/fs11
+f7/ft7 >= f30/ft10
+f7/ft7 >= f31/ft11
+f12/fa2 >= f20/fs4
+f12/fa2 >= f25/fs9
+f12/fa2 >= f27/fs11
+f13/fa3 >= f20/fs4
+f13/fa3 >= f25/fs9
+f13/fa3 >= f27/fs11
+f14/fa4 >= f20/fs4
+f14/fa4 >= f21/fs5
+f14/fa4 >= f25/fs9
+f14/fa4 >= f27/fs11
+f14/fa4 >= f30/ft10
+f14/fa4 >= f31/ft11
+f16/fa6 >= f20/fs4
+f16/fa6 >= f25/fs9
+f16/fa6 >= f27/fs11
+f18/fs2 >= f20/fs4
+f19/fs3 >= f20/fs4
+f19/fs3 >= f21/fs5
+f19/fs3 >= f24/fs8
+f19/fs3 >= f25/fs9
+f19/fs3 >= f27/fs11
+f20/fs4 <= f21/fs5
+f20/fs4 <= f22/fs6
+f20/fs4 <= f23/fs7
+f20/fs4 <= f24/fs8
+f20/fs4 <= f25/fs9
+f20/fs4 <= f27/fs11
+f20/fs4 <= f28/ft8
+f20/fs4 <= f29/ft9
+f20/fs4 <= f30/ft10
+f20/fs4 <= f31/ft11
+f21/fs5 >= f25/fs9
+f21/fs5 >= f27/fs11
+f22/fs6 >= f25/fs9
+f22/fs6 >= f27/fs11
+f23/fs7 >= f25/fs9
+f23/fs7 >= f27/fs11
+f24/fs8 >= f25/fs9
+f24/fs8 >= f27/fs11
+f25/fs9 <= f27/fs11
+f25/fs9 <= f28/ft8
+f25/fs9 <= f29/ft9
+f25/fs9 <= f30/ft10
+f25/fs9 <= f31/ft11
+f27/fs11 <= f28/ft8
+f27/fs11 <= f29/ft9
+f27/fs11 <= f30/ft10
+f27/fs11 <= f31/ft11
+f28/ft8 >= f30/ft10
+f28/ft8 >= f31/ft11
+f29/ft9 >= f30/ft10
+f30/ft10 <= f31/ft11
+Exiting Daikon.
