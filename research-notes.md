@@ -826,3 +826,17 @@ Much to my surprise, the boot process completed in less than an hour, and I was
 able to log in and do a couple basic shell commands at the terminal, before 
 engaging the shutdown sequence. This resulted in [a 15.7 MB trace](src/utils/trace/20220805-181853.dtrace) 
 that contains 6,484 program points.
+
+## Next Steps
+
+1. Figure out what special FP values are (l. 23-34)
+1. Analyze daikon_output.txt lines 23-34 (special values) and 42-58 (CSR ordering).
+1. Run Daikon again comparing two program points to each other (relabel every 
+other tick to be entry/exit of previous. (changes in trace encoding)
+	- zero/nonzero conditions that describe CWE
+	- Conditionals in Daikon (split-info file)
+1. Non-hardware CWEs
+
+Invoking Daikon with a split-info file (.spinfo):
+
+	java -cp $DAIKONDIR/daikon.jar daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
